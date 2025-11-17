@@ -19,6 +19,10 @@ def main():
     roupas = Roupa.query.all()
     return render_template('index.html', roupas=roupas)
 
+@app.route('/cadastro')
+def cadastro():
+    return render_template('cadastrar.html')
+
 @app.route('/add', methods=['POST'])
 def add_roupa():
     data = request.get_json()
