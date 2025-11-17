@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -13,11 +13,16 @@ class Roupa(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     tamanho = db.Column(db.String(10))
     preco = db.Column(db.Float)
+    criado_em = db.Column(db.DateTime, default=db.func.current_timestamp())
+    editado_em = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
 @app.route('/')
 def main():
-    roupas = Roupa.query.all()
-    return render_template('index.html', roupas=roupas)
+    page = request.args.get('page', 1, type=int)
+    per_page = 5  # quantidade de itens por página
+    pagination = Roupa.query.paginate(page=page, per_page=per_page, error_out=False)
+    roupas = pagination.items
+    return render_template('index.html', roupas=roupas, pagination=pagination)
 
 @app.route('/cadastro')
 def cadastro():
@@ -25,18 +30,30 @@ def cadastro():
 
 @app.route('/add', methods=['POST'])
 def add_roupa():
-    data = request.get_json()
+    nome = request.form.get('nome')
+    tamanho = request.form.get('tamanho')
+    preco = request.form.get('preco')
+    preco_limpo = preco.replace('R$', '').replace('.', '').replace(',', '.').strip()
+    preco_float = float(preco_limpo)
 
     nova_roupa = Roupa(
-        nome=data['nome'],
-        tamanho=data['tamanho'],
-        preco=data['preco']
+        nome=nome,
+        tamanho=tamanho,
+        preco=preco_float,
+        criado_em=db.func.current_timestamp(),
+        editado_em=db.func.current_timestamp()
     )
     db.session.add(nova_roupa)
     db.session.commit()
+    return redirect(url_for('cadastro', sucesso=True))
 
-    return jsonify({'message': 'Roupa adicionada com sucesso!'})
-
+@app.route('/delete/<int:id>', methods=['POST', 'GET'])
+def delete_roupa(id):
+    roupa = Roupa.query.get_or_404(id)
+    db.session.delete(roupa)
+    db.session.commit()
+    return redirect(url_for('main'))
+    
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()

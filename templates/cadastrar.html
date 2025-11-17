@@ -12,7 +12,43 @@
 
 <body>
     {% include 'navbar.html' %}
-
+    {% if sucesso %}
+    <div class="alert alert-success">Cadastro realizado com sucesso!</div>
+    {% endif %}
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <form action="{{ url_for('add_roupa')}}" method="POST" class="p-4 mt-5 row g-2 rounded bg-light w-25 shadow">
+            <div class="form-group col-md-6 w-50">
+                <label for="nome">Nome</label>
+                <input type="text" required class="form-control" id="nome" name="nome" placeholder="Digite o nome">
+            </div>
+            <div class="form-group col-md-6 w-50">
+                <label for="tamanho">Tamanho</label>
+                <select class="form-control" id="tamanho" name="tamanho" required>
+                    <option selected disabled value="">Escolha o tamanho</option>
+                    <option value="P">P</option>
+                    <option value="M">M</option>
+                    <option value="G">G</option>
+                </select>
+            </div>
+            <div class="form-group col-12 w-50">
+                <label for="preco">Preço</label>
+                <input type="number" step="0.01" required class="form-control" id="preco" name="preco"
+                    placeholder="Digite o preço">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </div>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9ScQZ6pG9mZQZ6Y5Rr1YlF6r9K8QbR9T8eJg"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
