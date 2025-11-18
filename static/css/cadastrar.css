@@ -1,0 +1,13 @@
+#roupa, #acessorio {
+    position: absolute; /* Faz as divs ficarem sobrepostas */
+    top: 50%; /* Centraliza verticalmente */
+    left: 50%; /* Centraliza horizontalmente */
+    transform: translate(-50%, -50%); /* Ajusta para o centro exato */
+    width: 100%; /* Ajusta o tamanho da div */
+    display: none; /* Esconde inicialmente */
+}
+
+#roupa.visible, #acessorio.visible {
+    display: block; /* Mostra a div quando visível */
+    z-index: 10; /* Coloca a div visível acima */
+}

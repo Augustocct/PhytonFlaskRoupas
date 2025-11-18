@@ -8,14 +8,20 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastrar.css') }}">
 </head>
 
 <body>
     {% include 'navbar.html' %}
-    {% if sucesso %}
-    <div class="alert alert-success">Cadastro realizado com sucesso!</div>
-    {% endif %}
-    <div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="container">
+        <h1 class="text-center mt-4">Tipo de cadastro</h1>
+        <select class="form-control" id="tipo" name="tipo" required>
+            <option selected disabled value="">Escolha o tipo de cadastro</option>
+            <option value="Roupa">Roupa</option>
+            <option value="Acessório">Acessório</option>
+        </select>
+    </div>
+    <div class="d-flex justify-content-center align-items-center vh-100" id="roupa" style="visibility: hidden;">
         <form action="{{ url_for('add_roupa')}}" method="POST" class="p-4 mt-5 row g-2 rounded bg-light w-25 shadow">
             <div class="form-group col-md-6 w-50">
                 <label for="nome">Nome</label>
@@ -40,6 +46,34 @@
             </div>
         </form>
     </div>
+    <div class="d-flex justify-content-center align-items-center vh-100" id="acessorio" style="visibility: hidden;">
+        <form action="{{ url_for('add_acessorio')}}" method="POST" class="p-4 mt-5 row g-2 rounded bg-light w-25 shadow">
+            <div class="form-group col-md-6 w-50">
+                <label for="nome">Nome</label>
+                <input type="text" required class="form-control" id="nome" name="nome" placeholder="Digite o nome">
+            </div>
+            <div class="form-group col-md-6 w-50">
+                <label for="tipo_acessorio">Tipo de acessório</label>
+                <select class="form-control" id="tipo_acessorio" name="tipo_acessorio" required>
+                    <option selected disabled value="">Escolha o tipo do acessório</option>
+                    <option value="Perna">Perna</option>
+                    <option value="Braço">Braço</option>
+                    <option value="Pescoço">Pescoço</option>
+                </select>
+            </div>
+            <div class="form-group col-12 w-50">
+                <label for="preco">Preço</label>
+                <input type="number" step="0.01" required class="form-control" id="preco" name="preco"
+                    placeholder="Digite o preço">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </div>
+        </form>
+        {% if sucesso %}
+        <div class="alert alert-success">Cadastro realizado com sucesso!</div>
+        {% endif %}
+    </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
@@ -49,6 +83,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+    <script>
+        document.getElementById('tipo').addEventListener('change', function () {
+        const tipo = this.value;
+        const roupa = document.getElementById('roupa');
+        const acessorio = document.getElementById('acessorio');
+
+        if (tipo === 'Roupa') {
+            roupa.style.visibility = 'visible';
+            acessorio.style.visibility = 'hidden';
+        } else if (tipo === 'Acessório') {
+            roupa.style.visibility = 'hidden';
+            acessorio.style.visibility = 'visible';
+        } else {
+            roupa.style.visibility = 'hidden';
+            acessorio.style.visibility = 'hidden';
+        }
+    });
+    </script>
 </body>
 
 </html>
