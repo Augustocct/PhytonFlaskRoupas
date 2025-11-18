@@ -28,6 +28,11 @@ def main():
 def cadastro():
     return render_template('cadastrar.html')
 
+@app.route('/editar')
+def editar():
+    roupas = Roupa.query.all()
+    return render_template('editar.html', roupas=roupas)
+
 @app.route('/add', methods=['POST'])
 def add_roupa():
     nome = request.form.get('nome')
@@ -46,6 +51,25 @@ def add_roupa():
     db.session.add(nova_roupa)
     db.session.commit()
     return redirect(url_for('cadastro', sucesso=True))
+
+@app.route('/edit/<int:id>', methods=['POST'])
+def editar_roupa(id):
+    roupa = Roupa.query.get_or_404(id)
+    nome = request.form.get('nome')
+    tamanho = request.form.get('tamanho')
+    preco = request.form.get('preco')
+    preco = request.form.get('preco')
+    if preco is None or preco.strip() == '':
+        preco_float = roupa.preco  # mantém o valor antigo se não vier nada novo
+    else:
+        preco_limpo = preco.replace('R$', '').replace(',', '.').strip()
+        preco_float = float(preco_limpo)
+
+    roupa.nome = nome
+    roupa.tamanho = tamanho
+    roupa.preco = preco_float
+    db.session.commit()
+    return redirect(url_for('editar'))
 
 @app.route('/delete/<int:id>', methods=['POST', 'GET'])
 def delete_roupa(id):
