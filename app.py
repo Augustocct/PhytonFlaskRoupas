@@ -114,7 +114,26 @@ def add_acessorio():
     db.session.add(novo_acessorio)
     db.session.commit()
     return redirect(url_for('cadastro', sucesso=True))
-    
+
+@app.route('/edit_acessorio/<int:id>', methods=['POST'])
+def editar_acessorio(id):
+    acessorio = Acessorios.query.get_or_404(id)
+    nome = request.form.get('nome')
+    tipo_acessorio = request.form.get('tipo_acessorio')
+    preco = request.form.get('preco')
+    preco = request.form.get('preco')
+    if preco is None or preco.strip() == '':
+        preco_float = preco.preco  # mantém o valor antigo se não vier nada novo
+    else:
+        preco_limpo = preco.replace('R$', '').replace(',', '.').strip()
+        preco_float = float(preco_limpo)
+
+    acessorio.nome = nome
+    acessorio.tipo_acessorio = tipo_acessorio
+    acessorio.preco = preco_float
+    db.session.commit()
+    return redirect(url_for('editar'))
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
