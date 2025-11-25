@@ -36,9 +36,46 @@
                     <td>R${{ r.preco }}</td>
                     <td>{{ r.criado_em }}</td>
                     <td>{{ r.editado_em }}</td>
-                    <td><a href=""><i class="bi bi-pencil-square"></i></a></td>
-                    <td><a href="{{ url_for('delete_roupa', id=r.id) }}"><i class="bi bi-trash-fill"></i></a></td>
+                    <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditarRoupa{{ r.id }}">
+                        <i class="bi bi-pencil-square text-white"></i>
+                    </button></td>
+                    <td><button type="button" class="btn btn-primary"><a href="{{ url_for('delete_roupa', id=r.id) }}"><i class="bi bi-trash text-white"></i></a></button></td>
                 </tr>
+                <div class="modal fade" id="modalEditarRoupa{{ r.id }}" tabindex="-1" aria-labelledby="modalEditarRoupaLabel{{ r.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalEditarRoupaLabel{{ r.id }}">Editar Roupa</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ url_for('editar_roupa', id=r.id) }}" method="POST">
+                                    <div class="mb-3">
+                                        <label for="nome{{ r.id }}" class="col-form-label">Nome:</label>
+                                        <input type="text" required class="form-control" id="nome{{ r.id }}" name="nome" value="{{ r.nome }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="tamanho{{ r.id }}" class="col-form-label">Tamanho:</label>
+                                        <select class="form-control" id="tamanho{{ r.id }}" name="tamanho" required>
+                                            <option disabled value="">Escolha o tamanho</option>
+                                            <option value="P" {% if r.tamanho == 'P' %}selected{% endif %}>P</option>
+                                            <option value="M" {% if r.tamanho == 'M' %}selected{% endif %}>M</option>
+                                            <option value="G" {% if r.tamanho == 'G' %}selected{% endif %}>G</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="preco{{ r.id }}" class="col-form-label">Preço:</label>
+                                        <input type="number" step="0.01" required class="form-control" id="preco{{ r.id }}" name="preco" value="{{ r.preco }}">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
             </tbody>
         </table>
@@ -92,9 +129,46 @@
                     <td>R${{ a.preco }}</td>
                     <td>{{ a.criado_em }}</td>
                     <td>{{ a.editado_em }}</td>
-                    <td><a href=""><i class="bi bi-pencil-square"></i></a></td>
-                    <td><a href="{{ url_for('delete_acessorio', id=a.id) }}"><i class="bi bi-trash-fill"></i></a></td>
+                    <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditar{{ a.id }}">
+                    <i class="bi bi-pencil-square text-white"></i>
+                </button></td>
+                    <td><button type="button" class="btn btn-primary"><a href="{{ url_for('delete_acessorio', id=a.id) }}"><i class="bi bi-trash text-white"></i></a></button></td>
                 </tr>
+                <div class="modal fade" id="modalEditar{{ a.id }}" tabindex="-1" aria-labelledby="modalEditarLabel{{ a.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalEditarLabel{{ a.id }}">Editar Acessório</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ url_for('editar_acessorio', id=a.id) }}" method="POST">
+                                    <div class="mb-3">
+                                        <label for="nome{{ a.id }}" class="col-form-label">Nome:</label>
+                                        <input type="text" required class="form-control" id="nome{{ a.id }}" name="nome" value="{{ a.nome }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="tipo_acessorio{{ a.id }}" class="col-form-label">Tipo de Acessório:</label>
+                                        <select class="form-control" id="tipo_acessorio{{ a.id }}" name="tipo_acessorio" required>
+                                            <option disabled value="">Escolha o tipo de acessório</option>
+                                            <option value="Perna" {% if a.tipo_acessorio == 'Perna' %}selected{% endif %}>Perna</option>
+                                            <option value="Pescoço" {% if a.tipo_acessorio == 'Pescoço' %}selected{% endif %}>Pescoço</option>
+                                            <option value="Braço" {% if a.tipo_acessorio == 'Braço' %}selected{% endif %}>Braço</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="preco{{ a.id }}" class="col-form-label">Preço:</label>
+                                        <input type="number" step="0.01" required class="form-control" id="preco{{ a.id }}" name="preco" value="{{ a.preco }}">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
             </tbody>
         </table>
@@ -137,6 +211,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

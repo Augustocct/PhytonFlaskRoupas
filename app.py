@@ -78,13 +78,18 @@ def add_roupa():
     db.session.commit()
     return redirect(url_for('cadastro', sucesso=True))
 
-@app.route('/edit/<int:id>', methods=['POST'])
+@app.route('/edit/<int:id>', methods=['POST', 'GET'])
 def editar_roupa(id):
     roupa = Roupa.query.get_or_404(id)
     nome = request.form.get('nome')
     tamanho = request.form.get('tamanho')
     preco = request.form.get('preco')
     preco = request.form.get('preco')
+
+    if nome is None or nome.strip() == '':
+        nome = roupa.nome
+    if tamanho is None or tamanho.strip() == '':
+        tamanho = roupa.tamanho
     if preco is None or preco.strip() == '':
         preco_float = roupa.preco  # mantém o valor antigo se não vier nada novo
     else:
@@ -123,15 +128,21 @@ def add_acessorio():
     db.session.commit()
     return redirect(url_for('cadastro', sucesso=True))
 
-@app.route('/edit_acessorio/<int:id>', methods=['POST'])
+@app.route('/edit_acessorio/<int:id>', methods=['POST', 'GET'])
 def editar_acessorio(id):
     acessorio = Acessorios.query.get_or_404(id)
     nome = request.form.get('nome')
     tipo_acessorio = request.form.get('tipo_acessorio')
     preco = request.form.get('preco')
-    preco = request.form.get('preco')
-    if preco is None or preco.strip() == '':
-        preco_float = preco.preco  # mantém o valor antigo se não vier nada novo
+    
+    if not nome or nome.strip() == '':
+        nome = acessorio.nome  # Mantém o valor antigo se o campo estiver vazio
+
+    if not tipo_acessorio or tipo_acessorio.strip() == '':
+        tipo_acessorio = acessorio.tipo_acessorio  # Mantém o valor antigo se o campo estiver vazio
+
+    if not preco or preco.strip() == '':
+        preco_float = acessorio.preco  # Mantém o valor antigo se o campo estiver vazio
     else:
         preco_limpo = preco.replace('R$', '').replace(',', '.').strip()
         preco_float = float(preco_limpo)
@@ -146,16 +157,6 @@ def editar_acessorio(id):
 def delete_acessorio(id):
     acessorio = Acessorios.query.get_or_404(id)
     db.session.delete(acessorio)
-    db.session.commit()
-    return redirect(url_for('excluir'))
-
-@app.route('/delete_multiplos', methods=['POST'])
-def delete_multiplos():
-    ids = request.form.getlist('ids')
-    for id in ids:
-        produto = Produto.query.get(id)
-        if produto:
-            db.session.delete(produto)
     db.session.commit()
     return redirect(url_for('excluir'))
 

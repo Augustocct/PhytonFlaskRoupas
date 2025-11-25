@@ -48,7 +48,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <form action="{{ url_for('delete_roupa', id=r.id) }}" method="POST">
+                            <form action="{% if r.tipo == 'roupa' %}{{ url_for('delete_roupa', id=r.id) }}{% elif r.tipo == 'acessorio' %}{{ url_for('delete_acessorio', id=r.id) }}{% endif %}" method="POST">
                                 <button type="submit" class="btn btn-danger">Confirmar exclusão</button>
                             </form>
                         </div>
