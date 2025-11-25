@@ -13,7 +13,8 @@
 <body class="m-0" style="background-color: #F9F5F0;">
     {% include 'navbar.html' %}
     <div class="table-responsive container text-center mt-5">
-        <table class="table table-hover table-bordered table-striped table-sm mt-5">
+        <h3 class="mt-5">Roupas</h3>
+        <table class="table table-hover table-bordered table-striped table-sm mt-3">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Id</th>
@@ -41,24 +42,25 @@
                 {% endfor %}
             </tbody>
         </table>
-        {% if pagination.pages > 1 %}
-        <nav aria-label="Navegação de páginas">
-            <ul class="pagination">
-                {% if pagination.has_prev %}
+
+        {% if pag_roupa.pages > 1 %}
+        <nav aria-label="Navegação de páginas roupas">
+            <ul class="pagination justify-content-center">
+                {% if pag_roupa.has_prev %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ pagination.prev_num }}">Anterior</a>
+                    <a class="page-link" href="?page_roupa={{ pag_roupa.prev_num }}&page_acessorio={{ pag_acessorio.page }}">Anterior</a>
                 </li>
                 {% else %}
                 <li class="page-item disabled"><span class="page-link">Anterior</span></li>
                 {% endif %}
-                {% for p in range(1, pagination.pages + 1) %}
-                <li class="page-item {% if p == pagination.page %}active{% endif %}">
-                    <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+                {% for p in range(1, pag_roupa.pages + 1) %}
+                <li class="page-item {% if p == pag_roupa.page %}active{% endif %}">
+                    <a class="page-link" href="?page_roupa={{ p }}&page_acessorio={{ pag_acessorio.page }}">{{ p }}</a>
                 </li>
                 {% endfor %}
-                {% if pagination.has_next %}
+                {% if pag_roupa.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ pagination.next_num }}">Próxima</a>
+                    <a class="page-link" href="?page_roupa={{ pag_roupa.next_num }}&page_acessorio={{ pag_acessorio.page }}">Próxima</a>
                 </li>
                 {% else %}
                 <li class="page-item disabled"><span class="page-link">Próxima</span></li>
@@ -66,6 +68,64 @@
             </ul>
         </nav>
         {% endif %}
+
+        <h3 class="mt-5">Acessórios</h3>
+        <table class="table table-hover table-bordered table-striped table-sm mt-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Preço</th>
+                    <th scope="col">Criado em</th>
+                    <th scope="col">Editado em</th>
+                    <th scope="col">Editar</th>
+                    <th scope="col">Excluir</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in acessorios %}
+                <tr>
+                    <th scope="row">{{ a.id }}</th>
+                    <td>{{ a.nome }}</td>
+                    <td>{{ a.tipo_acessorio }}</td>
+                    <td>R${{ a.preco }}</td>
+                    <td>{{ a.criado_em }}</td>
+                    <td>{{ a.editado_em }}</td>
+                    <td><a href=""><i class="bi bi-pencil-square"></i></a></td>
+                    <td><a href="{{ url_for('delete_acessorio', id=a.id) }}"><i class="bi bi-trash-fill"></i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if pag_acessorio.pages > 1 %}
+        <nav aria-label="Navegação de páginas acessórios">
+            <ul class="pagination justify-content-center">
+                {% if pag_acessorio.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="?page_roupa={{ pag_roupa.page }}&page_acessorio={{ pag_acessorio.prev_num }}">Anterior</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+                {% endif %}
+                {% for p in range(1, pag_acessorio.pages + 1) %}
+                <li class="page-item {% if p == pag_acessorio.page %}active{% endif %}">
+                    <a class="page-link" href="?page_roupa={{ pag_roupa.page }}&page_acessorio={{ p }}">{{ p }}</a>
+                </li>
+                {% endfor %}
+                {% if pag_acessorio.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page_roupa={{ pag_roupa.page }}&page_acessorio={{ pag_acessorio.next_num }}">Próxima</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled"><span class="page-link">Próxima</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        <!-- Paginação pode ser implementada separadamente para cada tabela, se necessário -->
     </div>
     <!-- JS (jQuery, Popper.js, Bootstrap) para o navbar toggler e dropdown funcionarem -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

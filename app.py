@@ -36,11 +36,14 @@ class Acessorios(Produto):
 
 @app.route('/')
 def main():
-    page = request.args.get('page', 1, type=int)
-    per_page = 5  # quantidade de itens por página
-    pagination = Roupa.query.paginate(page=page, per_page=per_page, error_out=False)
-    roupas = pagination.items
-    return render_template('index.html', roupas=roupas, pagination=pagination)
+    page_roupa = request.args.get('page_roupa', 1, type=int)
+    page_acessorio = request.args.get('page_acessorio', 1, type=int)
+    per_page = 5
+    pag_roupa = Roupa.query.paginate(page=page_roupa, per_page=per_page, error_out=False)
+    pag_acessorio = Acessorios.query.paginate(page=page_acessorio, per_page=per_page, error_out=False)
+    roupas = pag_roupa.items
+    acessorios = pag_acessorio.items
+    return render_template('index.html', roupas=roupas, acessorios=acessorios, pag_roupa=pag_roupa, pag_acessorio=pag_acessorio)
 
 @app.route('/cadastro')
 def cadastro():
@@ -50,6 +53,11 @@ def cadastro():
 def editar():
     produtos = Produto.query.all()
     return render_template('editar.html', produtos = produtos)
+
+@app.route('/excluir')
+def excluir():
+    produtos = Produto.query.all()
+    return render_template('excluir.html', produtos=produtos)
 
 @app.route('/add', methods=['POST'])
 def add_roupa():
@@ -94,7 +102,7 @@ def delete_roupa(id):
     roupa = Roupa.query.get_or_404(id)
     db.session.delete(roupa)
     db.session.commit()
-    return redirect(url_for('main'))
+    return redirect(url_for('excluir'))
 
 @app.route('/add_acessorio', methods=['POST'])
 def add_acessorio():
@@ -133,6 +141,23 @@ def editar_acessorio(id):
     acessorio.preco = preco_float
     db.session.commit()
     return redirect(url_for('editar'))
+
+@app.route('/delete_acessorio/<int:id>', methods=['POST', 'GET'])
+def delete_acessorio(id):
+    acessorio = Acessorios.query.get_or_404(id)
+    db.session.delete(acessorio)
+    db.session.commit()
+    return redirect(url_for('excluir'))
+
+@app.route('/delete_multiplos', methods=['POST'])
+def delete_multiplos():
+    ids = request.form.getlist('ids')
+    for id in ids:
+        produto = Produto.query.get(id)
+        if produto:
+            db.session.delete(produto)
+    db.session.commit()
+    return redirect(url_for('excluir'))
 
 if __name__ == '__main__':
     with app.app_context():
